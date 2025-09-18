@@ -25,22 +25,29 @@ module Shipping
     private
 
     def handle_response(response)
-      if response.is_a?(Net::HTTPSuccess)
+      case response
+      when Net::HTTPSuccess
         begin
           parsed_response = JSON.parse(response.body, symbolize_names: true)
           if parsed_response.present?
             if parsed_response.is_a?(Hash) && parsed_response[:meta].present? && parsed_response[:meta][:status] == 'failed'
+              Rails.logger.error("Unhandled response: #{response.body}")
               nil
             else
               parsed_response
             end
           else
+            Rails.logger.error("Empty response body: #{response.body}")
             nil
           end
-        rescue JSON::ParserError
+        rescue JSON::ParserError => e
+          Rails.logger.error("JSON Parse Error: #{e.message}")
           nil
         end
+      when Net::HTTPUnauthorized
+        { error: 'Authentication Failed', status: 401 }
       else
+        Rails.logger.error("Unhandled response: #{response.body}")
         nil
       end
     end

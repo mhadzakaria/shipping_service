@@ -5,7 +5,17 @@ class RatesController < ApplicationController
     data = client.check_rate(params[:origin], params[:destination], params[:weight])
 
     if data.present?
-      render json: RateSerializer.new(data).as_json
+      if data[:error]
+        render json: {
+          meta: {
+            status: 'failed',
+            message: data[:error]
+          },
+          data: nil
+        }, status: data[:status]
+      else
+        render json: RateSerializer.new(data).as_json
+      end
     else
       render json: {
         meta: {
