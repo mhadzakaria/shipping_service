@@ -25,7 +25,6 @@ module Shipping
     private
 
     def handle_response(response)
-      debugger
       if response.is_a?(Net::HTTPSuccess)
         begin
           parsed_response = JSON.parse(response.body, symbolize_names: true)
