@@ -19,7 +19,7 @@ module Shipping
 
       response = post(BASE_URL, params, headers)
 
-      # if response.present?
+      if response.present?
         # Timestamp
         timestamp = Time.now.strftime("%Y%m%d%H%M%S")
 
@@ -34,7 +34,7 @@ module Shipping
             response_body: response.to_json
           }.to_json)
         end
-      # end
+      end
 
       response
     end
