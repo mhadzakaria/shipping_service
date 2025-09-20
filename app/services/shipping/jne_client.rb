@@ -1,20 +1,20 @@
 module Shipping
   class JneClient < BaseClient
     BASE_URL = "https://rajaongkir.komerce.id/api/v1/calculate/district/domestic-cost"
-    API_KEY = ENV['RAJA_ONGKIR_SHIPPING_COST_API_KEY']
+    API_KEY = ENV["RAJA_ONGKIR_SHIPPING_COST_API_KEY"]
 
     def check_rate(origin, destination, weight)
       params = {
         origin: origin,
         destination: destination,
         weight: weight,
-        courier: 'jne',
-        price: 'lowest'
+        courier: "jne",
+        price: "lowest"
       }
 
       headers = {
         api_key: API_KEY,
-        content_type: 'application/x-www-form-urlencoded'
+        content_type: "application/x-www-form-urlencoded"
       }
 
       response = post(BASE_URL, params, headers)
