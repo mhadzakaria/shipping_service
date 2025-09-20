@@ -5,9 +5,9 @@ RSpec.describe 'Api::V1::Rates', type: :request do
     get('list rates') do
       tags 'Rates'
       produces 'application/json'
-      parameter name: :origin, in: :query, type: :string, description: 'origin sub-district id', required: true
-      parameter name: :destination, in: :query, type: :string, description: 'destination sub-district id', required: true
-      parameter name: :weight, in: :query, type: :integer, description: 'weight in grams', required: true
+      parameter name: :origin, in: :query, type: :string, example: 566, description: 'origin sub-district id', required: true
+      parameter name: :destination, in: :query, type: :string, example: 456, description: 'destination sub-district id', required: true
+      parameter name: :weight, in: :query, type: :integer, example: 1000, description: 'weight in grams', required: true
 
       let(:origin) { '558' }
       let(:destination) { '485' }
@@ -18,11 +18,13 @@ RSpec.describe 'Api::V1::Rates', type: :request do
 
         schema type: :object,
                properties: {
+                 success: { type: :boolean, example: true },
+                 message: { type: :string, example: 'Rates fetched successfully' },
                  courier: {
                   type: :string,
                   example: 'JNE'
                  },
-                 data: {
+                 rates: {
                    type: :array,
                    items: {
                      type: :object,
@@ -54,11 +56,14 @@ RSpec.describe 'Api::V1::Rates', type: :request do
 
         schema type: :object,
                properties: {
-                 courier: {
-                  type: :string,
-                  example: 'JNE'
-                 },
-                 data: { type: :object, nullable: true }
+                 success: { type: :boolean, example: false },
+                 error: {
+                   type: :object,
+                   properties: {
+                     code: { type: :string, example: 'BAD_REQUEST' },
+                     message: { type: :string, example: 'Invalid request or courier service is unavailable.' }
+                   }
+                 }
                }
         run_test!
       end
@@ -71,11 +76,14 @@ RSpec.describe 'Api::V1::Rates', type: :request do
 
         schema type: :object,
                properties: {
-                 courier: {
-                  type: :string,
-                  example: 'JNE'
-                 },
-                 data: { type: :object, nullable: true }
+                 success: { type: :boolean, example: false },
+                 error: {
+                   type: :object,
+                   properties: {
+                     code: { type: :string, example: 'INTERNAL_ERROR' },
+                     message: { type: :string, example: 'Terjadi kesalahan pada server. Coba lagi nanti' }
+                   }
+                 }
                }
         run_test!
       end

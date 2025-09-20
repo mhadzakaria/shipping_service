@@ -8,31 +8,35 @@ module Api
         if data.present?
           if data[:error]
             render json: {
-              meta: {
-                status: 'failed',
+              success: false,
+              error: {
+                code: "BAD_REQUEST",
                 message: data[:error]
-              },
-              data: nil
+              }
             }, status: data[:status]
           else
-            render json: RateSerializer.new(data).as_json
+            render json: {
+              success: true,
+              message: "Rates fetched successfully",
+              **RateSerializer.new(data).as_json
+            }, status: :ok
           end
         else
           render json: {
-            meta: {
-              status: 'failed',
-              message: 'Invalid request or courier service is unavailable.'
-            },
-            data: nil
+            success: false,
+            error: {
+              code: "BAD_REQUEST",
+              message: "Invalid request or courier service is unavailable."
+            }
           }, status: :bad_request
         end
       rescue StandardError => e
         render json: {
-          meta: {
-            status: 'failed',
-            message: e.message
-          },
-          data: nil
+          success: false,
+          error: {
+            code: "INTERNAL_ERROR",
+            message: "Terjadi kesalahan pada server. Coba lagi nanti"
+          }
         }, status: :internal_server_error
       end
     end

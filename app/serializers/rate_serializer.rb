@@ -6,7 +6,7 @@ class RateSerializer
   def as_json
     {
       courier: "JNE",
-      data: @data[:data]
+      rates: @data[:data]
     }
   end
 end

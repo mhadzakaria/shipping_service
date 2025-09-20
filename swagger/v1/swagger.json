@@ -15,6 +15,7 @@
           {
             "name": "origin",
             "in": "query",
+            "example": 566,
             "description": "origin sub-district id",
             "required": true,
             "schema": {
@@ -24,6 +25,7 @@
           {
             "name": "destination",
             "in": "query",
+            "example": 456,
             "description": "destination sub-district id",
             "required": true,
             "schema": {
@@ -33,6 +35,7 @@
           {
             "name": "weight",
             "in": "query",
+            "example": 1000,
             "description": "weight in grams",
             "required": true,
             "schema": {
@@ -48,11 +51,19 @@
                 "schema": {
                   "type": "object",
                   "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Rates fetched successfully"
+                    },
                     "courier": {
                       "type": "string",
                       "example": "JNE"
                     },
-                    "data": {
+                    "rates": {
                       "type": "array",
                       "items": {
                         "type": "object",
@@ -96,13 +107,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "courier": {
-                      "type": "string",
-                      "example": "JNE"
+                    "success": {
+                      "type": "boolean",
+                      "example": false
                     },
-                    "data": {
+                    "error": {
                       "type": "object",
-                      "nullable": true
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "example": "BAD_REQUEST"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Invalid request or courier service is unavailable."
+                        }
+                      }
                     }
                   }
                 }
@@ -116,13 +136,22 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "courier": {
-                      "type": "string",
-                      "example": "JNE"
+                    "success": {
+                      "type": "boolean",
+                      "example": false
                     },
-                    "data": {
+                    "error": {
                       "type": "object",
-                      "nullable": true
+                      "properties": {
+                        "code": {
+                          "type": "string",
+                          "example": "INTERNAL_ERROR"
+                        },
+                        "message": {
+                          "type": "string",
+                          "example": "Terjadi kesalahan pada server. Coba lagi nanti"
+                        }
+                      }
                     }
                   }
                 }
