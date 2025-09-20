@@ -31,6 +31,7 @@ module Api
           }, status: :bad_request
         end
       rescue StandardError => e
+        Rails.logger.info e.message
         render json: {
           success: false,
           error: {

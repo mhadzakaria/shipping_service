@@ -22,9 +22,14 @@ module Shipping
       if response.present?
         # Timestamp
         timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+        m = Time.now.strftime("%m")
+        d = Time.now.strftime("%d")
 
         # Nama file di public/
-        filename = "public/rate_#{origin}_#{destination}_#{weight}_#{params[:courier]}_#{params[:price]}_#{timestamp}.json"
+        folder_name = "public/#{m}/#{d}/"
+        FileUtils.mkdir_p(folder_name) unless Dir.exist?(folder_name)
+
+        filename = "#{folder_name}rate_#{origin}_#{destination}_#{weight}_#{params[:courier]}_#{params[:price]}_#{timestamp}.json"
 
         # Simpan file JSON
         File.open(filename, "w") do |f|
