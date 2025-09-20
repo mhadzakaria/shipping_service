@@ -9,15 +9,18 @@ RSpec.describe 'Api::V1::Rates', type: :request do
       parameter name: :destination, in: :query, type: :string, description: 'destination sub-district id', required: true
       parameter name: :weight, in: :query, type: :integer, description: 'weight in grams', required: true
 
+      let(:origin) { '558' }
+      let(:destination) { '485' }
+      let(:weight) { 1000 }
+
       response(200, 'successful') do
+        before { get api_v1_rates_path(origin: origin, destination: destination, weight: weight) }
+
         schema type: :object,
                properties: {
-                 meta: {
-                   type: :object,
-                   properties: {
-                     status: { type: :string, example: 'success' },
-                     message: { type: :string, example: 'Rates fetched successfully' }
-                   }
+                 courier: {
+                  type: :string,
+                  example: 'JNE'
                  },
                  data: {
                    type: :array,
@@ -46,14 +49,14 @@ RSpec.describe 'Api::V1::Rates', type: :request do
       end
 
       response(400, 'bad request') do
+        let(:origin) { 'invalid' }
+        before { get api_v1_rates_path(origin: origin, destination: destination, weight: weight) }
+
         schema type: :object,
                properties: {
-                 meta: {
-                   type: :object,
-                   properties: {
-                     status: { type: :string, example: 'failed' },
-                     message: { type: :string, example: 'Invalid request or courier service is unavailable.' }
-                   }
+                 courier: {
+                  type: :string,
+                  example: 'JNE'
                  },
                  data: { type: :object, nullable: true }
                }
@@ -61,14 +64,16 @@ RSpec.describe 'Api::V1::Rates', type: :request do
       end
 
       response(500, 'internal server error') do
+        before do
+          allow_any_instance_of(Shipping::JneClient).to receive(:check_rate).and_raise(StandardError, 'Simulated internal error')
+          get api_v1_rates_path(origin: origin, destination: destination, weight: weight)
+        end
+
         schema type: :object,
                properties: {
-                 meta: {
-                   type: :object,
-                   properties: {
-                     status: { type: :string, example: 'failed' },
-                     message: { type: :string, example: 'Internal Server Error' }
-                   }
+                 courier: {
+                  type: :string,
+                  example: 'JNE'
                  },
                  data: { type: :object, nullable: true }
                }
