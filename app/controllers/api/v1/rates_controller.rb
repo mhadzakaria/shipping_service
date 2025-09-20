@@ -2,7 +2,6 @@ module Api
   module V1
     class RatesController < Api::V1::BaseController
       def index
-        # misal default courier: JNE
         client = Shipping::JneClient.new
         data = client.check_rate(params[:origin], params[:destination], params[:weight])
 

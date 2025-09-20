@@ -38,10 +38,5 @@ module Shipping
 
       response
     end
-
-    def track(awb)
-      # Bisa implement nanti
-      {}
-    end
   end
 end
