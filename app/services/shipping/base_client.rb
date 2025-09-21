@@ -5,8 +5,15 @@ module Shipping
 
     def get(url, headers = {})
       uri = URI(url)
-      res = Net::HTTP.get_response(uri)
-      handle_response(res)
+      request = Net::HTTP::Get.new(uri)
+      request["key"] = headers[:api_key] if headers[:api_key].present?
+      request["Content-Type"] = headers[:content_type] || "application/x-www-form-urlencoded"
+
+      http = Net::HTTP.new(uri.host, uri.port)
+      http.use_ssl = true
+      response = http.request(request)
+
+      handle_response(response)
     end
 
     def post(url, params, headers = {})
@@ -19,6 +26,7 @@ module Shipping
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = true
       response = http.request(request)
+
       handle_response(response)
     end
 
