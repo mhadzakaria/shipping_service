@@ -5,6 +5,56 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/rates/province": {
+      "get": {
+        "summary": "list privincies from JNE",
+        "tags": [
+          "Rates"
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Provincies fetched successfully"
+                    },
+                    "courier": {
+                      "type": "string",
+                      "example": "JNE"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 5
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "JAWA BARAT"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/rates": {
       "get": {
         "summary": "list rates",

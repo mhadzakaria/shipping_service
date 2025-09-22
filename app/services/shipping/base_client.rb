@@ -56,7 +56,7 @@ module Shipping
         { error: "Authentication Failed", status: 401 }
       else
         Rails.logger.error("Unhandled response: #{response.body}")
-        nil
+        { error: "Something went wrong!", status: 400 }
       end
     end
   end
