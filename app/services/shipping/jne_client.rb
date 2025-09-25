@@ -94,6 +94,21 @@ module Shipping
       response
     end
 
+    def check_district(city_id)
+      check_district_url = "https://rajaongkir.komerce.id/api/v1/destination/district/#{city_id}"
+
+      headers = {
+        api_key: API_KEY,
+        content_type: "application/x-www-form-urlencoded"
+      }
+
+      response = get(check_district_url, headers)
+
+      save_response_as_file(response, "district")
+
+      response
+    end
+
     def save_response_as_file(response, endpoint_name)
       return unless response.present?
 

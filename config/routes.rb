@@ -9,6 +9,7 @@ Rails.application.routes.draw do
         collection do
           get :province
           get :city
+          get :district
         end
       end
     end

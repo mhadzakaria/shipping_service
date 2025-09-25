@@ -1,6 +1,48 @@
 require 'swagger_helper'
 
 RSpec.describe 'Api::V1::Rates', type: :request do
+  path '/api/v1/rates/district' do
+    get('list districts from JNE') do
+      tags 'Rates'
+      produces 'application/json'
+      parameter name: :city_id, in: :query, type: :string, example: 60, description: 'city id', required: true
+
+      response(200, 'successful') do
+        let(:city_id) { 60 }
+        before { get district_api_v1_rates_path(city_id: city_id) }
+
+        schema type: :object,
+               properties: {
+                 success: { type: :boolean, example: true },
+                 message: { type: :string, example: 'Districts fetched successfully' },
+                 courier: {
+                  type: :string,
+                  example: 'JNE'
+                 },
+                 data: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :integer, example: 556 },
+                       name: { type: :string, example: 'NGAMPRAH' }
+                     }
+                   }
+                 }
+               }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
+
   path '/api/v1/rates/city' do
     get('list cities from JNE') do
       tags 'Rates'
@@ -8,7 +50,8 @@ RSpec.describe 'Api::V1::Rates', type: :request do
       parameter name: :province_id, in: :query, type: :string, example: 5, description: 'province id', required: true
 
       response(200, 'successful') do
-        before { get city_api_v1_rates_path }
+        let(:province_id) { 5 }
+        before { get city_api_v1_rates_path(province_id: province_id) }
 
         schema type: :object,
                properties: {
