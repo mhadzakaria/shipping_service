@@ -10,6 +10,7 @@ Rails.application.routes.draw do
           get :province
           get :city
           get :district
+          get :sub_district
         end
       end
     end

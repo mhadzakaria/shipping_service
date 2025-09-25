@@ -5,6 +5,68 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/rates/sub_district": {
+      "get": {
+        "summary": "list sub-districts from JNE",
+        "tags": [
+          "Rates"
+        ],
+        "parameters": [
+          {
+            "name": "district_id",
+            "in": "query",
+            "example": 566,
+            "description": "district id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Sub-districts fetched successfully"
+                    },
+                    "courier": {
+                      "type": "string",
+                      "example": "JNE"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 6104
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "CEMPAKAMEKAR"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/rates/district": {
       "get": {
         "summary": "list districts from JNE",

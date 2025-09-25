@@ -1,6 +1,47 @@
 require 'swagger_helper'
 
 RSpec.describe 'Api::V1::Rates', type: :request do
+  path '/api/v1/rates/sub_district' do
+    get('list sub-districts from JNE') do
+      tags 'Rates'
+      produces 'application/json'
+      parameter name: :district_id, in: :query, type: :string, example: 566, description: 'district id', required: true
+
+      response(200, 'successful') do
+        let(:district_id) { 566 }
+        before { get sub_district_api_v1_rates_path(district_id: district_id) }
+
+        schema type: :object,
+               properties: {
+                 success: { type: :boolean, example: true },
+                 message: { type: :string, example: 'Sub-districts fetched successfully' },
+                 courier: {
+                  type: :string,
+                  example: 'JNE'
+                 },
+                 data: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :integer, example: 6104 },
+                       name: { type: :string, example: 'CEMPAKAMEKAR' }
+                     }
+                   }
+                 }
+               }
+
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+    end
+  end
   path '/api/v1/rates/district' do
     get('list districts from JNE') do
       tags 'Rates'

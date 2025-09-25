@@ -45,7 +45,7 @@ module Shipping
     end
 
     def check_province
-      check_province_url = 'https://rajaongkir.komerce.id/api/v1/destination/province'
+      check_province_url = "https://rajaongkir.komerce.id/api/v1/destination/province"
 
       headers = {
         api_key: API_KEY,
@@ -105,6 +105,21 @@ module Shipping
       response = get(check_district_url, headers)
 
       save_response_as_file(response, "district")
+
+      response
+    end
+
+    def check_sub_district(district_id)
+      check_sub_district_url = "https://rajaongkir.komerce.id/api/v1/destination/sub-district/#{district_id}"
+
+      headers = {
+        api_key: API_KEY,
+        content_type: "application/x-www-form-urlencoded"
+      }
+
+      response = get(check_sub_district_url, headers)
+
+      save_response_as_file(response, "sub_district")
 
       response
     end
