@@ -61,5 +61,22 @@ jobs:
           ruby-version: .ruby-version
           bundler-cache: true
 
+      - name: Wait for Postgres
+        run: |
+          until pg_isready -h localhost -U postgres; do
+            echo "Waiting for Postgres..."
+            sleep 2
+          done
+
+      - name: Set up database
+        env:
+          RAILS_ENV: test
+          PGHOST: localhost
+          PGUSER: postgres
+          PGPASSWORD: postgres
+        run: |
+          bin/rails db:create
+          bin/rails db:schema:load # atau db:migrate kalau kamu pakai migrasi
+
       - name: Run tests
         run: bundle exec rspec
