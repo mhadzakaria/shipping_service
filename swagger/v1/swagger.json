@@ -5,6 +5,68 @@
     "version": "v1"
   },
   "paths": {
+    "/api/v1/rates/city": {
+      "get": {
+        "summary": "list cities from JNE",
+        "tags": [
+          "Rates"
+        ],
+        "parameters": [
+          {
+            "name": "province_id",
+            "in": "query",
+            "example": 5,
+            "description": "province id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "example": true
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Cities fetched successfully"
+                    },
+                    "courier": {
+                      "type": "string",
+                      "example": "JNE"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer",
+                            "example": 55
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "BANDUNG"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/rates/province": {
       "get": {
         "summary": "list privincies from JNE",

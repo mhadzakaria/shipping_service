@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       resources :rates, only: [ :index ] do
         collection do
           get :province
+          get :city
         end
       end
     end

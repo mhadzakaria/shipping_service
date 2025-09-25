@@ -40,7 +40,7 @@ module Api
           }
         }, status: :internal_server_error
       end
-      
+
       def province
         client = Shipping::JneClient.new
         data = client.check_province
@@ -59,6 +59,46 @@ module Api
               success: true,
               message: "Provincies fetched successfully",
               **Jne::ProvinceSerializer.new(data).as_json
+            }, status: :ok
+          end
+        else
+          render json: {
+            success: false,
+            error: {
+              code: "BAD_REQUEST",
+              message: "Invalid request or courier service is unavailable."
+            }
+          }, status: :bad_request
+        end
+      rescue StandardError => e
+        Rails.logger.info e.message
+        render json: {
+          success: false,
+          error: {
+            code: "INTERNAL_ERROR",
+            message: "Terjadi kesalahan pada server. Coba lagi nanti"
+          }
+        }, status: :internal_server_error
+      end
+
+      def city
+        client = Shipping::JneClient.new
+        data = client.check_city(params[:province_id])
+
+        if data.present?
+          if data[:error]
+            render json: {
+              success: false,
+              error: {
+                code: "BAD_REQUEST",
+                message: data[:error]
+              }
+            }, status: data[:status]
+          else
+            render json: {
+              success: true,
+              message: "Cities fetched successfully",
+              **Jne::CitySerializer.new(data).as_json
             }, status: :ok
           end
         else

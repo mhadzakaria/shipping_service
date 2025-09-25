@@ -78,5 +78,44 @@ module Shipping
 
       response
     end
+
+    def check_city(province_id)
+      check_city_url = "https://rajaongkir.komerce.id/api/v1/destination/city/#{province_id}"
+
+      headers = {
+        api_key: API_KEY,
+        content_type: "application/x-www-form-urlencoded"
+      }
+
+      response = get(check_city_url, headers)
+
+      save_response_as_file(response, "city")
+
+      response
+    end
+
+    def save_response_as_file(response, endpoint_name)
+      return unless response.present?
+
+      # Timestamp
+      timestamp = Time.now.strftime("%Y%m%d%H%M%S")
+      m = Time.now.strftime("%m")
+      d = Time.now.strftime("%d")
+
+      # Nama file di public/
+      folder_name = "public/#{m}/#{d}/"
+      FileUtils.mkdir_p(folder_name) unless Dir.exist?(folder_name)
+
+      filename = "#{folder_name}#{endpoint_name}_#{timestamp}.json"
+
+      # Simpan file JSON
+      File.open(filename, "w") do |f|
+        f.write({
+          timestamp: timestamp,
+          params: {},
+          response_body: response.to_json
+        }.to_json)
+      end
+    end
   end
 end
