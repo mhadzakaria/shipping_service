@@ -51,4 +51,6 @@ group :development, :test do
   gem "rswag-api"
   gem "rswag-ui"
   gem "rswag-specs"
+
+  gem "annotate", "2.6.5"
 end
