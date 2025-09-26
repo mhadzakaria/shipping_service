@@ -79,4 +79,6 @@ jobs:
           bin/rails db:schema:load # atau db:migrate kalau kamu pakai migrasi
 
       - name: Run tests
+        env:
+          RAJA_ONGKIR_SHIPPING_COST_API_KEY: ${{ secrets.RAJA_ONGKIR_SHIPPING_COST_API_KEY }}
         run: bundle exec rspec
