@@ -3,7 +3,7 @@ module Shipping
     BASE_URL = "https://rajaongkir.komerce.id/api/v1"
     API_KEY = ENV["RAJA_ONGKIR_SHIPPING_COST_API_KEY"]
 
-    def initialize()
+    def initialize
       @endpoint_request = nil
     end
 
